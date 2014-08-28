@@ -1,3 +1,5 @@
 val root = (project in file(".")).enablePlugins(SbtActiveMQ)
 
-//brokerURI := Some("hello")
+
+amqBrokers += ("sample" -> "xbean:file:src/main/etc/activemq-broker.xml")
+
