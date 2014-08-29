@@ -10,6 +10,11 @@ These are the features of this small plugin:
 - Start / Stop / Restart brokers
 - List registered URI
 
+## Snapshots
+
+A snapshot version is available at 
+[https://oss.sonatype.org/content/repositories/snapshots/](https://oss.sonatype.org/content/repositories/snapshots/)
+
 
 ## Configuration
 
