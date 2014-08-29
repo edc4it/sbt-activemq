@@ -18,7 +18,39 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-context" % "2.5.5"
 )
 
-publishMavenStyle := false
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
 
-/** Console */
-initialCommands in console := "import com.edc4it.sbt.activemq._"
+pomExtra := (
+  <url>https://github.com/edc4it/sbt-activemq/</url>
+    <licenses>
+      <license>
+        <name>Apache License, Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+        <comments>A business-friendly OSS license</comments>
+      </license>
+    </licenses>
+    <scm>
+      <connection>scm:git:git@github.com:edc4it/sbt-activemq</connection>
+      <url>https://github.com/edc4it/sbt-activemq/</url>
+    </scm>
+    <developers>
+      <developer>
+        <name>Raphael Parree</name>
+        <email>rparree@edc4it.com</email>
+        <organization>edc4it</organization>
+      </developer>
+    </developers>
+  )
+
+pomIncludeRepository := { _ => false }
+
+publishMavenStyle := true
+
+publishArtifact in Test := false

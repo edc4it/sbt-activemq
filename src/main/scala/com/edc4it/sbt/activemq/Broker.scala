@@ -20,35 +20,61 @@
 package com.edc4it.sbt.activemq
 
 import java.nio.file.FileSystems
+import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.locks.ReentrantReadWriteLock
 
 import com.edc4it.sbt.activemq.ContextClassloaderHelper.withRootClassloaderContext
 import org.apache.activemq.broker.{BrokerFactory, BrokerService}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class Broker(val uri: String, val name : String) {
 
-  private var _broker: Option[BrokerService] = None
+class Broker(val uri: String, val name: String) {
 
+  // todo: setup a test -> not sure if this AtomicReference fixes any thread problems, 
+  private val _broker: AtomicReference[Option[BrokerService]] = new AtomicReference[Option[BrokerService]](None)
+
+  var startLock = new ReentrantReadWriteLock()
+  var starting: AtomicReference[Boolean] = new AtomicReference[Boolean](false)
 
   def start(): Unit = {
+
     if (started)
       sys.error("Broker is still running stop it first")
 
-    val brokerService = withRootClassloaderContext(BrokerFactory.createBroker(uri, false))
-    _broker = Some(brokerService)
-    val dataDirectory = FileSystems.getDefault.getPath(".activemq-data", name).toFile
-    brokerService.setDataDirectoryFile(dataDirectory)
-    brokerService.getManagementContext.setConnectorPort(0)
-    brokerService .start()
+    if (!starting.compareAndSet(false, true)) {
+      sys.error(s"Broker is starting")
+    }
+
+    try {
+      scala.concurrent.future {
+
+        _broker.set(Some(withRootClassloaderContext(BrokerFactory.createBroker(uri, false))))
+        val brokerService = _broker.get().get
+
+
+        val dataDirectory = FileSystems.getDefault.getPath("activemq", "data", name).toFile
+        brokerService.setDataDirectoryFile(dataDirectory)
+        brokerService.getManagementContext.setConnectorPort(0)
+        brokerService.setBrokerName(name)
+
+
+
+        brokerService.start()
+
+      }
+    } finally {
+      starting.set(false)
+    }
   }
 
   def stop(): Unit = {
     if (!started)
       sys.error("Broker is not running")
-    _broker.foreach(b => b.stop()) // stop a previous broker
-    _broker = None
+
+    _broker.getAndSet(None).foreach(b => b.stop()) // stop a previous broker
   }
 
-  def started = _broker.exists(b => b.isStarted)
+  def started = _broker.get.exists(b => b.isStarted)
 
 }
