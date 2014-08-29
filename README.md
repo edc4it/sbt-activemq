@@ -62,7 +62,7 @@ sample  STOPPED broker:tcp://localhost:17171
 [success] Total time: 0 s,
 ```
 
-(Fixing the log4j is next on the agenda :)
+([Fixing](https://github.com/edc4it/sbt-activemq/issues/2) the log4j is next on the agenda :)
 
 - Stop a broker
 
