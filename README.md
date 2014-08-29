@@ -79,4 +79,8 @@ Some important notes (some will need to be
 - The broker starts a random port for the JMX use `netstat` to see which one
 - The data directory is set to `.activemq-data/<name>`
 
+### License
+
+SBT ActiveMQ  is Apache 2.0 licensed.
+
 
