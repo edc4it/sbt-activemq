@@ -8,7 +8,7 @@ These are the features of this small plugin:
 
 - Register multiple broker URIs
 - Start / Stop / Restart brokers
-- List registered URI
+- List registered URIs
 
 ## Snapshots
 
