@@ -49,9 +49,9 @@ sample  STOPPED broker:tcp://localhost:17171
 
 ```bash
 > amqStart default
-log4j:WARN No appenders could be found for logger (org.apache.activemq.broker.jmx.ManagementContext).
-log4j:WARN Please initialize the log4j system properly.
-log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+Apache ActiveMQ 5.10.0 (brokerOne, ID:hp-8570w-43824-1409310328896-0:1) is starting
+Apache ActiveMQ 5.10.0 (brokerOne, ID:hp-8570w-43824-1409310328896-0:1) started
+
 [success] Total time: 1 s, ...
 
 > amqStatus
@@ -62,12 +62,13 @@ sample  STOPPED broker:tcp://localhost:17171
 [success] Total time: 0 s,
 ```
 
-([Fixing](https://github.com/edc4it/sbt-activemq/issues/2) the log4j is next on the agenda :)
-
 - Stop a broker
 
 ```bash
-amqStop default
+> amqStop default
+Apache ActiveMQ 5.10.0 (sample, ID:hp-8570w-43824-1409310328896-0:1) is shutting down
+Apache ActiveMQ 5.10.0 (sample, ID:hp-8570w-43824-1409310328896-0:1) uptime 1 minute
+Apache ActiveMQ 5.10.0 (sample, ID:hp-8570w-43824-1409310328896-0:1) is shutdown 
 [success] Total time: 0 s,
 
 ```
@@ -78,6 +79,7 @@ Some important notes (some will need to be
 
 - The broker starts a random port for the JMX use `netstat` to see which one
 - The data directory is set to `activemq/data/<name>`
+- The log is written to `activemq/log/brokers.log` (the logs from the BrokerService are presented in the sbt console)
 
 ### License
 
