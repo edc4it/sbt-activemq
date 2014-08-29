@@ -1,4 +1,4 @@
-# SBT ActimeMQ
+# SBT ActiveMQ
 
 Simple auto plugin to run activemq from sbt
 
